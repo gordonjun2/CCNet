@@ -1,0 +1,10 @@
+cache/
+results/
+
+*.swp
+
+*.pyc
+*.o*
+
+data/
+Video_Frames/
