@@ -74,6 +74,25 @@ Their pretrained models can be found in their README.md instruction.
 
 1. Yes, you do not have to run any additional command. See 'docker-compose.yml' (CCNet/).
 
+**I am unable to do video objection detection inference because of this error:**
+
+No protocol specified
+: cannot connect to X server :0
+
+1.  Enable non-network local connections to access control list by running this command in your terminal (not in docker container):
+
+    ```
+    xhost +local:root
+    ```
+
+2. It should be working now. Try to start the video object detection again.
+
+3. Once it is done, disable non-network local connections to access control list by running this command in your terminal (not in docker container):
+
+    ```
+    xhost -local:root
+    ```
+
 **Can I see my GPU processes while using the container?**
 
 1. Yes, you do not have to run any additional command. To see GPU processes, type:
