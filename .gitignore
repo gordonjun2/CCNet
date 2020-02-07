@@ -1,10 +1,10 @@
 # Ignore cache files
 
-#./cache/nnet/CornerNet
-#./cache/nnet/CenterNet-52
-#./cache/nnet/CenterNet-104
+./cache/nnet/CornerNet
+./cache/nnet/CenterNet-52
+./cache/nnet/CenterNet-104
 
 # Ignore coco's annotations and datasets
 
-#./coco/annotations
-#./coco/images
+./coco/annotations
+./coco/images
