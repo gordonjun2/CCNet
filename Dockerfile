@@ -20,7 +20,7 @@ RUN apt-get update && \
     apt-get install -y software-properties-common && \
     add-apt-repository ppa:deadsnakes/ppa && \
     apt-get update && \
-    apt-get install -y python3.6 python3.6-dev python3-pip wget git sudo && \
+    apt-get install -y python3.6 python3.6-dev python3-pip wget git sudo nano && \
     rm -rf /var/lib/apt/lists/*
 
 RUN wget https://conda.anaconda.org/conda-forge/linux-64/ca-certificates-2018.4.16-0.tar.bz2 && \
@@ -41,7 +41,7 @@ RUN wget https://bootstrap.pypa.io/get-pip.py && \
 	python3 get-pip.py --user && \
 	rm get-pip.py
 
-# install dependencies
+# install dependencies and packages
 RUN apt-get update && apt-get install -y \
     libsm6 libxrender1 libfontconfig1 python3.6-tk && \
     apt install -y ffmpeg && \
@@ -375,4 +375,3 @@ WORKDIR /home/root
 #COPY ./cache/nnet/CornerNet /home/root/CornerNet/cache/nnet/CornerNet
 #COPY ./cache/nnet/CenterNet-52 /home/root/CenterNet/cache/nnet/CenterNet-52
 #COPY ./cache/nnet/CenterNet-104 /home/root/CenterNet/cache/nnet/CenterNet-104
-
