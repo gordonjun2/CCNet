@@ -22,35 +22,50 @@ Original Github Repository: https://github.com/Duankaiwen/CenterNet
 
 1. Git clone this repository to your local machine.
 
-2. Navigate to the root directory (CCNet/) using terminal and build the docker image using:
+2. Navigate to the root directory (ccnet/) using terminal and build the docker image using:
 
     ```
     USER_ID=$UID docker-compose run ccnet
     ```
 
-3. To use the docker container, use:
+3. To exit the container, just use 'Ctrl + d".
+
+4. If changes are made in the Dockerfile, build using:
+
+    ```
+    docker-compose build ccnet
+    ```
+
+5. To use the docker container without building, use:
 
     ```
     docker-compose run ccnet
     ```
 
-4. Done and enjoy CCNet!
+6. If 'docker-compose.yml' is updated, use:
+
+    ```
+    docker-compose up ccnet
+    docker-compose build ccnet
+    ```
+
+7. Done and enjoy ccnet!
 
 ## Notes
 
-Please read docker-compose.yml (CCNet/) to know more about the configurations used. 
+Please read docker-compose.yml (ccnet/) to know more about the configurations used. 
 
-Also, [**cocodataset/cocoapi**](https://github.com/cocodataset/cocoapi) is already added in both the CornerNet and CenterNet folders (CCNet/CornerNet and CCNet/CenterNet). You do not have to git clone the repository again.
+Also, [**cocodataset/cocoapi**](https://github.com/cocodataset/cocoapi) is already added in both the CornerNet and CenterNet folders (ccnet/CornerNet and ccnet/CenterNet). You do not have to git clone the repository again.
 
 **Where to download MSCOCO datasets and their annotations? Also, where to place them?**
 
 1. Go to MSCOCO official website (http://cocodataset.org/#download) and download the datasets.
 
-2. Create a folder 'coco' in the same directory as the 'docker-compose.yml' (CCNet/). In the 'coco' folder, create an 'images' folder and an 'annotations' folder.
+2. Create a folder 'coco' in the same directory as the 'docker-compose.yml' (ccnet/). In the 'coco' folder, create an 'images' folder and an 'annotations' folder.
 
-3. Place the datasets into the 'images' folder (eg. CCNet/coco/images/val2017/(images here)).
+3. Place the datasets into the 'images' folder (eg. ccnet/coco/images/val2017/(images here)).
 
-4. Place the respective annotations into the 'annotations' folder (eg. CCNet/coco/annotations/instances_val2017.json).
+4. Place the respective annotations into the 'annotations' folder (eg. ccnet/coco/annotations/instances_val2017.json).
 
 5. All set!
 
@@ -64,15 +79,15 @@ CenterNet: https://github.com/Duankaiwen/CenterNet
 
 Their pretrained models can be found in their README.md instruction.
 
-2. Create a folder 'cache' in the same directory as the 'docker-compose.yml' (CCNet/). In the 'cache' folder, create a 'nnet' folder.
+2. Create a folder 'cache' in the same directory as the 'docker-compose.yml' (ccnet/). In the 'cache' folder, create a 'nnet' folder.
 
-3. Place the model's pretrained model into the 'nnet' folder (eg. CCNet/cache/nnet/CenterNet-104/CenterNet-104_480000.pkl)
+3. Place the model's pretrained model into the 'nnet' folder (eg. ccnet/cache/nnet/CenterNet-104/CenterNet-104_480000.pkl)
 
 4. All set!
 
 **Is GPU enabled in the docker container?**
 
-1. Yes, you do not have to run any additional command. See 'docker-compose.yml' (CCNet/).
+1. Yes, you do not have to run any additional command. See 'docker-compose.yml' (ccnet/).
 
 **I am unable to do video objection detection inference because of this error:**
 
@@ -101,7 +116,7 @@ No protocol specified
     nvidia-smi
     ```
 
-See 'docker-compose.yml' (CCNet/).
+See 'docker-compose.yml' (ccnet/).
 
 **Why are the packages in CornerNet and CenterNet so outdated?**
 
