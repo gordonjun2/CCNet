@@ -1,18 +1,53 @@
 # NVIDIA CUDA
 
-FROM nvidia/cuda:8.0-runtime-ubuntu16.04
+# FROM nvidia/cuda:8.0-runtime-ubuntu16.04
+# LABEL maintainer "NVIDIA CORPORATION <cudatools@nvidia.com>"
+
+# RUN echo "deb https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1604/x86_64 /" > /etc/apt/sources.list.d/nvidia-ml.list
+
+# ENV CUDNN_VERSION 7.2.1.38
+# LABEL com.nvidia.cudnn.version="${CUDNN_VERSION}"
+
+# RUN apt-get update && apt-get install -y --no-install-recommends \
+#     libcudnn7=$CUDNN_VERSION-1+cuda8.0 \
+# && \
+#     apt-mark hold libcudnn7 && \
+#     rm -rf /var/lib/apt/lists/*
+
+FROM ubuntu:18.04
 LABEL maintainer "NVIDIA CORPORATION <cudatools@nvidia.com>"
 
-RUN echo "deb https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1604/x86_64 /" > /etc/apt/sources.list.d/nvidia-ml.list
-
-ENV CUDNN_VERSION 7.2.1.38
-LABEL com.nvidia.cudnn.version="${CUDNN_VERSION}"
-
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libcudnn7=$CUDNN_VERSION-1+cuda8.0 \
-&& \
-    apt-mark hold libcudnn7 && \
+gnupg2 curl ca-certificates && \
+    curl -fsSL https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub | apt-key add - && \
+    echo "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64 /" > /etc/apt/sources.list.d/cuda.list && \
+    echo "deb https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64 /" > /etc/apt/sources.list.d/nvidia-ml.list && \
+    apt-get purge --autoremove -y curl && \
+rm -rf /var/lib/apt/lists/*
+
+ENV CUDA_VERSION 10.2.89
+
+ENV CUDA_PKG_VERSION 10-2=$CUDA_VERSION-1
+
+# For libraries in the cuda-compat-* package: https://docs.nvidia.com/cuda/eula/index.html#attachment-a
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        cuda-cudart-$CUDA_PKG_VERSION \
+cuda-compat-10-2 && \
+ln -s cuda-10.2 /usr/local/cuda && \
     rm -rf /var/lib/apt/lists/*
+
+# Required for nvidia-docker v1
+RUN echo "/usr/local/nvidia/lib" >> /etc/ld.so.conf.d/nvidia.conf && \
+    echo "/usr/local/nvidia/lib64" >> /etc/ld.so.conf.d/nvidia.conf
+
+ENV PATH /usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH}
+ENV LD_LIBRARY_PATH /usr/local/nvidia/lib:/usr/local/nvidia/lib64
+
+# nvidia-container-runtime
+ENV NVIDIA_VISIBLE_DEVICES all
+ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
+ENV NVIDIA_REQUIRE_CUDA "cuda>=10.2 brand=tesla,driver>=384,driver<385 brand=tesla,driver>=396,driver<397 brand=tesla,driver>=410,driver<411 brand=tesla,driver>=418,driver<419"
+
 
 # Python 3.6
 ENV DEBIAN_FRONTEND noninteractive
@@ -78,17 +113,31 @@ RUN pip install --no-cache-dir python-dateutil==2.7.2 && \
     pip install --no-cache-dir torchvision==0.2.1 && \
     pip install --no-cache-dir tornado==5.0.2 && \
     pip install --no-cache-dir tqdm==4.23.0 && \
-    pip install --no-cache-dir wheel==0.31.0
+    pip install --no-cache-dir wheel==0.31.0 && \
+    pip install --no-cache-dir torch==1.1.0 torchvision==0.3.0 && \
+    pip install --no-cache-dir tensorboard==1.14.0 && \
+    pip install --no-cache-dir tensorboardX==2.0
+
 
     # Torch 0.4.1
-RUN sudo wget https://download.pytorch.org/whl/cu90/torch-0.4.1-cp36-cp36m-linux_x86_64.whl && \
-    sudo pip install torch-0.4.1-cp36-cp36m-linux_x86_64.whl && \
-    sudo rm torch-0.4.1-cp36-cp36m-linux_x86_64.whl
+#RUN sudo wget https://download.pytorch.org/whl/cu90/torch-0.4.1-cp36-cp36m-linux_x86_64.whl && \
+#    sudo pip install torch-0.4.1-cp36-cp36m-linux_x86_64.whl && \
+#    sudo rm torch-0.4.1-cp36-cp36m-linux_x86_64.whl
+
+    # Pytorch select 0.1 cpu
+RUN sudo wget https://conda.anaconda.org/anaconda/linux-64/_pytorch_select-0.1-cpu_0.tar.bz2 && \
+    sudo tar -xjf _pytorch_select-0.1-cpu_0.tar.bz2 -C /usr/bin && \
+    sudo rm _pytorch_select-0.1-cpu_0.tar.bz2
 
     # Numpy-base 1.14.3
 RUN sudo wget https://repo.continuum.io/pkgs/main/linux-64/numpy-base-1.14.3-py36h9be14a7_1.tar.bz2 && \
     sudo tar -xjf numpy-base-1.14.3-py36h9be14a7_1.tar.bz2 -C /usr/bin && \
     sudo rm numpy-base-1.14.3-py36h9be14a7_1.tar.bz2
+
+    # Cudatoolkit 10.2
+RUN sudo wget https://conda.anaconda.org/anaconda/linux-64/cudatoolkit-10.2.89-hfd86e86_0.tar.bz2 && \
+    sudo tar -xjf cudatoolkit-10.2.89-hfd86e86_0.tar.bz2 -C /usr/bin && \
+    sudo rm cudatoolkit-10.2.89-hfd86e86_0.tar.bz2
 
     # Blas 1.0
 RUN sudo wget https://repo.continuum.io/pkgs/main/linux-64/blas-1.0-mkl.tar.bz2 && \
@@ -101,9 +150,9 @@ RUN sudo wget https://repo.continuum.io/pkgs/main/linux-64/cairo-1.14.12-h763606
     sudo rm cairo-1.14.12-h7636065_2.tar.bz2
 
     # Cudatoolkit 8.0.3
-RUN sudo wget https://repo.continuum.io/pkgs/free/linux-64/cudatoolkit-8.0-3.tar.bz2 && \
-    sudo tar -xjf cudatoolkit-8.0-3.tar.bz2 -C /usr/bin && \
-    sudo rm cudatoolkit-8.0-3.tar.bz2
+#RUN sudo wget https://repo.continuum.io/pkgs/free/linux-64/cudatoolkit-8.0-3.tar.bz2 && \
+#    sudo tar -xjf cudatoolkit-8.0-3.tar.bz2 -C /usr/bin && \
+#    sudo rm cudatoolkit-8.0-3.tar.bz2
 
     # Dbus 1.13.2
 RUN sudo wget https://repo.continuum.io/pkgs/main/linux-64/dbus-1.13.2-h714fa37_1.tar.bz2 && \

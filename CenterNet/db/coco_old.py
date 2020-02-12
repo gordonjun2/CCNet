@@ -23,7 +23,6 @@ class MSCOCO(DETECTION):
         self._dataset = {
             "trainval": "train2014",
             "minival": "val2014",
-            "val": "val2017",
             "testdev": "testdev2017"
         }[self._split]
         
@@ -184,4 +183,4 @@ class MSCOCO(DETECTION):
         coco_eval.evaluate_fd()
         coco_eval.accumulate_fd()
         coco_eval.summarize_fd()
-        return coco_eval.stats[0], coco_eval.stats[12:], coco_eval.stats[:12]
+        return coco_eval.stats[0], coco_eval.stats[12:]
