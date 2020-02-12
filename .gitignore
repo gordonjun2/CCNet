@@ -12,8 +12,8 @@
 #./CenterNet/data/coco/images
 #./CornerNet/data/coco/annotations
 #./CornerNet/data/coco/images
-CenterNet
-CornerNet
+#CenterNet
+#CornerNet
 
 # Ignore __pycache__
 
