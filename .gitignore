@@ -13,3 +13,6 @@
 ./CornerNet/data/coco/annotations
 ./CornerNet/data/coco/images
 
+# Ignore __pycache__
+
+__pycache__.*
