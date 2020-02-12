@@ -382,8 +382,8 @@ RUN sudo wget https://repo.continuum.io/pkgs/main/linux-64/zlib-1.2.11-ha838bed_
 # Clone CornerNet and CenterNet from GitHub
 #RUN pip install --user 'git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI'
 
-RUN sudo git clone https://github.com/gordonjun2/CenterNet.git /home/root/CenterNet
 RUN sudo git clone https://github.com/gordonjun2/CornerNet.git /home/root/CornerNet
+RUN sudo git clone https://github.com/gordonjun2/CenterNet.git /home/root/CenterNet
 
 # CUDA Setting
 ENV FORCE_CUDA="0"
