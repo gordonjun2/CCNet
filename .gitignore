@@ -8,10 +8,12 @@
 
 ./coco/annotations
 ./coco/images
-./CenterNet/data/coco/annotations
-./CenterNet/data/coco/images
-./CornerNet/data/coco/annotations
-./CornerNet/data/coco/images
+#./CenterNet/data/coco/annotations
+#./CenterNet/data/coco/images
+#./CornerNet/data/coco/annotations
+#./CornerNet/data/coco/images
+CenterNet
+CornerNet
 
 # Ignore __pycache__
 
