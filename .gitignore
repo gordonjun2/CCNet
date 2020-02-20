@@ -1,13 +1,12 @@
-# Ignore cache files
+# Ignore files
 
-./cache/nnet/CornerNet
-./cache/nnet/CenterNet-52
-./cache/nnet/CenterNet-104
+*.pkl
+*.json
 
 # Ignore coco's annotations and datasets
 
-./coco/annotations
-./coco/images
+./coco/annotations/
+./coco/images/
 #./CenterNet/data/coco/annotations
 #./CenterNet/data/coco/images
 #./CornerNet/data/coco/annotations
